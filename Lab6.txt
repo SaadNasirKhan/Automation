@@ -1,0 +1,236 @@
+import org.testng.annotations.Test;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.Test;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.AfterTest;
+import java.time.Duration;
+import java.util.List;
+
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+public class Lab6 {
+	WebDriver driver = null;
+	
+	
+ 
+  @BeforeTest
+  public void beforeTest() {
+	  System.setProperty("webdriver.chrome.driver", "C://Users//4078//Desktop/chromedriver.exe");
+	  driver = new ChromeDriver();
+		
+		driver.manage().window().maximize();
+		
+		driver.get("https://omayo.blogspot.in/");
+
+	  
+  }
+
+  @AfterTest
+  public void afterTest() throws InterruptedException {
+	  Thread.sleep(2000);
+	  driver.quit();
+  }
+
+
+  @Test (priority=0)
+  public void Print_Table() {
+	  WebDriverWait Wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+	  Wait.until(ExpectedConditions.elementToBeClickable(By.id("ta1"))).sendKeys("Saad Nasir Khan");
+	  Wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[contains(@class,'widget HTML')]/div[1]/textarea[contains(text(),'The cat')]"))).getText();
+	  Wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[contains(@class,'widget HTML')]/div[1]/textarea[contains(text(),'The cat')]"))).clear();
+	  Wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[contains(@class,'widget HTML')]/div[1]/textarea[contains(text(),'The cat')]"))).sendKeys("My Name is Saad Nasir Khan");
+	  List<WebElement> allRows = driver.findElements(By.xpath("//table[contains(@id, 'table1')]/tbody/tr"));
+		for (WebElement row : allRows) { 
+		    List<WebElement> cells = row.findElements(By.tagName("td")); 
+		    for (WebElement cell : cells) {         
+
+		        System.out.println(cell.getText());
+		        }}
+  }
+   @Test (priority=1)
+   public void switch_frame() {
+	   Actions action = new Actions(driver);
+	   action.sendKeys(Keys.PAGE_DOWN).build().perform();
+	   WebDriverWait Wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+	   Wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[contains(@type, 'text')]"))).sendKeys("Saad Nasir Khan");
+	   Wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[contains(@type, 'password')]"))).sendKeys("abc123");
+	   Wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(@type, 'button')]"))).click();
+	   WebElement iframe1 =  driver.findElement(By.xpath("//iframe[contains(@id,'iframe1')]"));
+	   driver.switchTo().defaultContent();
+	   Wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(iframe1));
+		String OGWindow = driver.getWindowHandle();
+		driver.switchTo().window(OGWindow);
+		driver.switchTo().defaultContent();
+		WebElement iframe2 =  driver.findElement(By.xpath("//iframe[contains(@id,'iframe2')]"));
+		Wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(iframe2));
+		driver.switchTo().window(OGWindow);
+		action.sendKeys(Keys.PAGE_DOWN).build().perform();
+		    
+	   
+	}
+   
+   @Test (priority=2)
+   public void button_enable() {
+	   Actions action = new Actions(driver);
+	   WebDriverWait Wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+	   Wait.until(ExpectedConditions.elementToBeClickable(By.name("userid"))).sendKeys("SaadNasirKhan");
+	   Wait.until(ExpectedConditions.elementToBeClickable(By.name("pswrd"))).sendKeys("abc123");
+	   System.out.println("////////////////Alert1////////////////");
+	   Wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[contains(@type, 'button')]"))).click();
+	   Alert alert = driver.switchTo().alert();
+		String alertMessage= driver.switchTo().alert().getText();
+		System.out.println(alertMessage);
+		alert.accept();
+		Select select = new Select(driver.findElement(By.xpath("//*[@id=\"multiselect1\"]")));
+		select.selectByValue("Hyundaix");
+		
+		
+		Select drop = new Select(driver.findElement(By.xpath("//*[@id=\"drop1\"]")));
+		drop.selectByValue("jkl");
+		Wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@id='textbox1']"))).clear();
+		Wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@id='textbox1']"))).sendKeys("Hello World!");
+		System.out.println("////////////////Enable Button////////////////");
+		
+		Boolean nn =driver.findElement(By.xpath("//div[@class=\"widget-content\"]/button[@id='but2']")).isEnabled();
+		 if(nn) {
+			 System.out.println("Button is Enabled");
+	     }
+		 
+		 else {
+	           System.out.println("Button is Disabled");
+	     }
+		 
+		 action.sendKeys(Keys.PAGE_DOWN).build().perform();
+	    }
+   
+   @Test (priority=3)
+   public void choose_file() {
+	   WebDriverWait Wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+	   Wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@class=\"widget-content\"]/button[@name='samename'][1]"))).click();
+	   Wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@class=\"widget-content\"]/button[@name='samename'][2]"))).click();
+	   Wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@class=\"widget-content\"]/button[@name='samename'][3]"))).click();
+	   System.out.println("////////////////Alert2////////////////");
+	   Wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@value='ClickAfterTextDissappears']"))).click();
+	   Alert alert1 = driver.switchTo().alert();
+		String alertMessage1= driver.switchTo().alert().getText();
+		System.out.println(alertMessage1);
+		alert1.accept();
+		
+		Wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[contains(text(),'Open a popup window')]"))).click();
+		String OGWindow = driver.getWindowHandle();
+		for(String Handle : driver.getWindowHandles()) {
+			if(!OGWindow.contentEquals(Handle)) {
+				driver.switchTo().window(Handle);
+				break;
+			}
+		}
+		
+		driver.close();
+		
+		driver.switchTo().window(OGWindow);
+		Wait.until(ExpectedConditions.elementToBeClickable(By.id("uploadfile"))).sendKeys("C://Users//4078//Desktop/Sample.txt");
+		
+   }
+   
+   @Test (priority=4)
+   public void checkbox() throws InterruptedException {
+	   Actions action = new Actions(driver);
+	   WebDriverWait Wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+	   System.out.println("////////////////Alert3////////////////");
+	   Wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@value='Button3']"))).click();
+	   Alert alert2 = driver.switchTo().alert();
+		String alertMessage2= driver.switchTo().alert().getText();
+		System.out.println(alertMessage2);
+		alert2.accept();
+		
+		Wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@onclick=\'setTimeout(myFunctionABC,3000)\']"))).click();
+		Thread.sleep(3000);
+		
+		 System.out.println("////////////////Double Click////////////////");				
+		Actions act = new Actions(driver);
+		WebElement btnElement = driver.findElement(By.xpath("//button[@ondblclick=\"dblclickAlert()\"]"));
+		act.doubleClick(btnElement).perform();
+		Alert alert3 = driver.switchTo().alert();
+		String alertMessage3= driver.switchTo().alert().getText();
+		System.out.println(alertMessage3);
+		alert3.accept();
+		
+			
+			Wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@onclick=\"setTimeout(myFunctionAXD,10000)\"]"))).click();
+			Wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[contains(@id, 'dte')]"))).click();
+			
+			action.sendKeys(Keys.PAGE_DOWN).build().perform();
+
+			Wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[contains(@id, 'radio1')]"))).click();
+			System.out.println("////////////////Click To Get Alert////////////////");
+			Wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[contains(@id,'alert1')]"))).click();
+			Alert alert4 = driver.switchTo().alert();
+			String alertMessage4= driver.switchTo().alert().getText();
+			System.out.println(alertMessage4);
+			alert4.accept();
+			Wait.until(ExpectedConditions.elementToBeClickable(By.id("checkbox1"))).click();
+			Wait.until(ExpectedConditions.elementToBeClickable(By.id("checkbox2"))).click();
+			
+   }
+   
+   @Test (priority=5)
+   public void end() {
+	   Actions action = new Actions(driver);
+	   WebDriverWait Wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+	   Wait.until(ExpectedConditions.elementToBeClickable(By.id("prompt"))).click();
+	   Alert alert = driver.switchTo().alert();
+		alert.sendKeys("Saad Nasir Khan");
+		alert.accept();
+		System.out.println("////////////////Click To Get Alert////////////////");
+		Wait.until(ExpectedConditions.elementToBeClickable(By.id("confirm"))).click();
+		Alert alert1 = driver.switchTo().alert();
+		String alertMessage1= driver.switchTo().alert().getText();
+		System.out.println(alertMessage1);
+		alert1.accept();
+		Wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[contains(@name,'textboxn')]"))).sendKeys("SaadNasirKhan");
+		action.sendKeys(Keys.PAGE_DOWN).build().perform();
+		Wait.until(ExpectedConditions.elementToBeClickable(By.id("sa"))).click();
+		Wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[contains(@id,'HTML24')]//input[contains(@class, 'classone')]"))).sendKeys("SaadNasirKhan");
+		Wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[contains(@id,'HTML28')]//input[contains(@class, 'classone')]"))).sendKeys("SaadNasirKhan");
+		
+		WebElement car = driver.findElement(By.name("vehicle"));
+	    if(car.isSelected()) {
+	    	System.out.println("Already Selected");
+}
+	    else {
+	    	car.click();
+	    }
+	    
+	    WebElement book = driver.findElement(By.xpath("//input[contains(@value,'Book')]"));
+	    if(book.isSelected()) {
+	    	book.click();
+}
+	    else {
+	    	System.out.println("Already deselected");
+	    	
+	    }
+		   
+	    WebElement Dropdown =driver.findElement(By.xpath("//button[contains(text(),'Dropdown')]"));
+	    Actions builder = new Actions(driver);
+		Action view= builder.click(Dropdown).build();
+		view.perform();
+		WebDriverWait wait_fb=new WebDriverWait(driver, Duration.ofSeconds(5));
+		wait_fb.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//div[contains(@id,'myDropdown')]/a[contains(text(),'Facebook')]")));
+		
+		Wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[contains(@id,'myDropdown')]/a[contains(text(),'Facebook')]"))).click();
+	   
+   }
+
+  
+}
